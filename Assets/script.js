@@ -1,28 +1,36 @@
-// Display today's date.
-var Today = moment().format("dddd, MMMM Do")
-$("#currentDay").text(Today);
+$(document).ready(function() {
+    // Display today's date.
+    var Today = moment().format("dddd, MMMM Do")
+    $("#currentDay").text(Today);
 
-function colorUpdater () {
-    var currentTime = moment().hours();
+    // Update hour color depending on time of day.
+    function colorUpdater () {
+        var currentTime = moment().hours();
 
-    $(".time-block").each(function () {
-        var timeBlock = parseInt($(this).attr("id"));
-        console.log (timeBlock)
+        $(".time-block").each(function () {
+            var timeBlock = parseInt($(this).attr("id"));
+            console.log (timeBlock)
 
-        if (timeBlock < currentTime) {
-            $(this).removeClass("present");
-            $(this).removeClass("future");
-            $(this).addClass("past");
-        } else if (timeBlock === currentTime) {
-            $(this).removeClass("past");
-            $(this).removeClass("future");
-            $(this).addClass("present");
-        } else {
-            $(this).removeClass("past");
-            $(this).removeClass("present");
-            $(this).addClass("future");
-        }
-    });
-}
+            if (timeBlock < currentTime) {
+                $(this).addClass("past");
+            } else if (timeBlock === currentTime) {
+                $(this).removeClass("past");
+                $(this).addClass("present");
+            } else {
+                $(this).removeClass("past");
+                $(this).removeClass("present");
+                $(this).addClass("future");
+            }
+        });
+    }
 
-colorUpdater();
+    colorUpdater();
+
+    // Save input to local storage on button click.
+    $(".saveBtn").on("click", function() {
+        var input = $(this).siblings(".description").val();
+        var time = $(this).siblings().attr("id");
+        localStorage.setItem(time, input);
+    })
+
+});
